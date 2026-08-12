@@ -1,0 +1,76 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: swifteats_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${DB_USER:-food_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-food_password}
+      POSTGRES_DB:       ${DB_NAME:-food_delivery}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-food_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      postgres
+        -c shared_buffers=512MB
+        -c effective_cache_size=2GB
+        -c work_mem=256MB
+        -c random_page_cost=1.1
+
+  analytics:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: swifteats_analytics
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST:     postgres
+      DB_PORT:     5432
+      DB_NAME:     ${DB_NAME:-food_delivery}
+      DB_USER:     ${DB_USER:-food_user}
+      DB_PASSWORD: ${DB_PASSWORD:-food_password}
+      NUM_CUSTOMERS:         100000
+      NUM_RESTAURANTS:       5000
+      NUM_DELIVERY_PARTNERS: 10000
+      NUM_ORDERS:            1000000
+    volumes:
+      - ../data/generated:/app/data/generated
+      - ../reports:/app/reports
+    networks:
+      - swifteats_net
+
+  jupyter:
+    image: jupyter/scipy-notebook:python-3.11
+    container_name: swifteats_jupyter
+    profiles: [analytics]
+    depends_on: [postgres]
+    environment:
+      JUPYTER_ENABLE_LAB: "yes"
+      DB_HOST: postgres
+      DB_USER: ${DB_USER:-food_user}
+      DB_PASSWORD: ${DB_PASSWORD:-food_password}
+      DB_NAME: ${DB_NAME:-food_delivery}
+    volumes:
+      - ../notebooks:/home/jovyan/notebooks
+    ports:
+      - "8888:8888"
+    networks:
+      - swifteats_net
+
+volumes:
+  postgres_data:
+    name: swifteats_postgres_data
+
+networks:
+  swifteats_net:
+    name: swifteats_network
