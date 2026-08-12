@@ -5,7 +5,7 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14%2B-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Analytics](https://img.shields.io/badge/Analytics-Advanced-orange?style=for-the-badge)
+![Analytics](https://img.shields.io/badge/Analytics-Moderate-orange?style=for-the-badge)
 ![Tests](https://img.shields.io/badge/Tests-pytest-green?style=for-the-badge)
 
 **An end-to-end food delivery analytics platform modelled on Swiggy / Zomato / DoorDash operations. Covers restaurant intelligence, customer retention science, real-time delivery tracking and executive BI — powered by PostgreSQL, Python and Power BI.**
