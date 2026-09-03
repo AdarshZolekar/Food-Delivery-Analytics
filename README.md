@@ -1,6 +1,6 @@
-# Food Delivery Analytics System 
-
 <div align="center">
+
+# Food Delivery Analytics System 
 
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14%2B-336791?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.12%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
